@@ -1,6 +1,7 @@
-name: Build iOS
+name: Build iOS Game
 
-on: push
+on: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -8,15 +9,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Create dummy IPA
+      - name: Download Godot iOS Template
         run: |
-          mkdir -p Payload
-          echo "com.example.test" > info.txt
-          zip -r test.zip Payload
-          mv test.zip Test.ipa
-      
+          curl -L -o godot-ios.zip https://github.com/godotengine/godot/releases/download/4.2.1-stable/Godot_v4.2.1-stable_ios.zip
+          unzip godot-ios.zip
+          
+      - name: Build IPA
+        run: |
+          mkdir -p build
+          echo "Your game would build here with proper Godot iOS export"
+          echo "This requires your actual game files to be in the repository"
+          touch build/game.ipa
+          
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: iOS-Build
-          path: Test.ipa
+          name: ArenaGame
+          path: build/game.ipa
