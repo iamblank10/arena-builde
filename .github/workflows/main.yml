@@ -7,6 +7,16 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build IPA
+      
+      - name: Create dummy IPA
         run: |
-          echo "Build would run here"
+          mkdir -p Payload
+          echo "com.example.test" > info.txt
+          zip -r test.zip Payload
+          mv test.zip Test.ipa
+      
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: iOS-Build
+          path: Test.ipa
